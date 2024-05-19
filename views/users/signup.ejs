@@ -1,0 +1,154 @@
+<% layout("/layout/boilerplate") %>
+
+<div class="row mt-3">
+    <h1 class="col-6 offset-3">Sign Up on Airbnb</h1>
+    <div class="col-6 offset-3">
+        <% if(!otp) { %>
+        <form action="/sendotp" method="POST" class="needs-validation" novalidate>
+        <% } %>
+        <% if(otp) { %>
+          <form action="/signup" method="POST" class="needs-validation" novalidate>
+            <% } %>
+        
+            <div class="mb-3">
+                <label for="username" class="form-label"> Username</label>
+                <% if(!otp) { %>
+                <input
+                  name="username"
+                  placeholder="enter your username"
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  required  
+                /> 
+                <% } %>
+                <% if(otp) { %>
+                  <input
+                  name="username"
+                  placeholder="enter your username"
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  value="<%= username %>"
+                  required
+                  readonly
+                  />
+                  <% } %>
+                <div class="valid-feedback">Username looks good!</div>
+                <div class="invalid-feedback">Please enter the Username</div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label"> Email</label>
+                <% if(!otp) { %>
+                <input
+                  name="email"
+                  placeholder="enter your email"
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  required
+                  oninput="validateEmail()"  
+                /> 
+                <% } %>
+                <% if(otp) { %>
+                  <input
+                  name="email"
+                  placeholder="enter your email"
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  value="<%= email %>"
+                  required
+                  readonly
+                  />
+                  <% } %>
+
+                <div class="valid-feedback">Email looks good!</div>
+                <div class="invalid-feedback">Please enter the email</div>
+            </div>
+           
+           
+            <div class="mb-3">
+              <% if(!otp) { %>
+                <label for="password" class="form-label"> Password</label>
+                <input
+                  name="password"
+                  placeholder="enter your password"
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  required
+                  
+                /> 
+                <% } %>
+                <% if(otp) { %>
+                  <label for="password" class="form-label"> Password</label>
+                  <input
+                  name="password"
+                  placeholder="enter your password"
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  value="<%= password %>"
+                  required
+                  readonly
+                  />
+                  <% } %>
+                <div class="valid-feedback">Password looks good!</div>
+                <div class="invalid-feedback">Please enter the password</div>
+            </div>
+            <% if(otp) { %>
+            <div class="mt-3 mb-3">
+             <b>Enter the OTP  sent on your email </b> 
+            </div>
+            <% } %>
+            <% if(otp) { %>
+            <div id="row" class="row">
+              <div class="mb-3 col-2"><input type="text" name="otp1" maxlength="1"  required class="form-control otp"></div>
+              <div class="mb-3 col-2"><input type="text" name="otp2" maxlength="1"  required class="form-control otp"></div>
+              <div class="mb-3 col-2"><input type="text" name="otp3" maxlength="1"  required class="form-control otp"></div>
+              <div class="mb-3 col-2"><input type="text" name="otp4" maxlength="1"  required class="form-control otp"></div>
+              <div class="mb-3 col-2"><input type="text" name="otp5" maxlength="1"  required class="form-control otp"></div>
+              <div class="mb-3 col-2"><input type="text" name="otp6" maxlength="1"  required class="form-control otp"></div> 
+            </div>
+            <% } %>
+            <% if(!otp) { %>
+            <button class="btn btn-outline-danger">Send OTP</button>
+            <% } %>
+            <% if(otp) { %>
+              <button class="btn btn-success">Verify OTP</button>
+              <% } %>
+        </form>
+      
+         
+         
+    </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+  
+  function OTPInput() {
+    const inputs = document.querySelectorAll('.otp');
+    inputs.forEach((input, index) => {
+      input.addEventListener('keydown', function(event) {
+        const key = event.key;
+        const keyCode = event.keyCode;
+
+        if (key === "Backspace") {
+          input.value = '';
+          if (index !== 0) inputs[index - 1].focus();
+        } else if (keyCode >= 48 && keyCode <= 57 || keyCode >= 65 && keyCode <= 90 || keyCode >= 97 && keyCode <= 122) { // Numbers 0-9 and letters a-z, A-Z
+          input.value = key; // Assign the pressed key value directly
+          if (index !== inputs.length - 1) inputs[index + 1].focus();
+          event.preventDefault();
+        }
+      });
+    });
+  }
+  
+  OTPInput();
+  
+});
+
+</script>
